@@ -41,5 +41,11 @@ const header = [
     }
   },
 ];
-
 export default header;
+
+/*
+const sortableTable = new SortableTable(header, {
+  url: 'api/rest/products'
+});
+
+root.append(sortableTable.element);*/

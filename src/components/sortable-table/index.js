@@ -15,7 +15,7 @@ export default class SortableTable {
     const { bottom } = this.element.getBoundingClientRect();
     const { id, order } = this.sorted;
 
-    if (bottom < document.documentElement.clientHeight && !this.loading && !this.sortLocally) {
+    if (bottom < document.documentElement.clientHeight && !this.loading && !this.isSortLocally) {
       this.start = this.end;
       this.end = this.start + this.step;
 
@@ -52,8 +52,10 @@ export default class SortableTable {
       column.append(this.subElements.arrow);
 
       if (this.isSortLocally) {
+        console.log(1);
         this.sortLocally(id, newOrder);
       } else {
+        console.log(2);
         this.sortOnServer(id, newOrder, 1, 1 + this.step);
       }
     }
@@ -166,13 +168,13 @@ export default class SortableTable {
       <div data-element="body" class="sortable-table__body">
         ${this.getTableRows(data)}
       </div>`;
-  }
+  };
 
   getTableRows (data) {
     return data.map(item => `
-      <div class="sortable-table__row">
+      <a class="sortable-table__row" href="/products/${item.id}">
         ${this.getTableRow(item, data)}
-      </div>`
+      </a>`
     ).join('');
   }
 
