@@ -12,7 +12,7 @@ export default class Page {
 
   async updateTableComponent (from, to) {
     const data = await fetchJson(`${process.env.BACKEND_URL}api/rest/orders?createdAt_gte=${from.toISOString()}&createdAt_lte=${to.toISOString()}&_sort=createdAt&_order=asc&_start=1&_end=20`);
-    this.components.sortableTable.addRows(data);
+    this.components.sortableTable.addRows(data, '1');
   }
 
 
@@ -35,7 +35,7 @@ export default class Page {
   }
 
   get template () {
-    return `<div class="dashboard">
+    return `<div class="sales">
       <div class="content__top-panel">
         <h2 class="page-title">Продажи</h2>
         <!-- RangePicker component -->

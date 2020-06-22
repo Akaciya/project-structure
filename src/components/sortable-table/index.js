@@ -30,6 +30,7 @@ export default class SortableTable {
 
   onSortClick = event => {
     const column = event.target.closest('[data-sortable="true"]');
+    this.resetPagination();
     const toggleOrder = order => {
       const orders = {
         asc: 'desc',
@@ -52,10 +53,8 @@ export default class SortableTable {
       column.append(this.subElements.arrow);
 
       if (this.isSortLocally) {
-        console.log(1);
         this.sortLocally(id, newOrder);
       } else {
-        console.log(2);
         this.sortOnServer(id, newOrder, 1, 1 + this.step);
       }
     }
@@ -83,7 +82,10 @@ export default class SortableTable {
 
     this.render();
   }
-
+  resetPagination () {
+    this.start = 1;
+    this.end = this.start + this.step;
+  }
   async render() {
     const {id, order} = this.sorted;
     const wrapper = document.createElement('div');
@@ -171,11 +173,20 @@ export default class SortableTable {
   };
 
   getTableRows (data) {
-    return data.map(item => `
+    const user = data.find(item => item.user);
+    if (user) {
+      return data.map(item => `
+      <div class="sortable-table__row">
+        ${this.getTableRow(item, data)}
+      </div>`
+      ).join('');
+    } else {
+      return data.map(item => `
       <a class="sortable-table__row" href="/products/${item.id}">
         ${this.getTableRow(item, data)}
       </a>`
-    ).join('');
+      ).join('');
+    }
   }
 
   getTableRow (item) {
@@ -220,7 +231,6 @@ export default class SortableTable {
 
   async sortOnServer (id, order, start, end) {
     const data = await this.loadData(id, order, start, end);
-
     this.renderRows(data);
   }
 
