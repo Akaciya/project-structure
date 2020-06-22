@@ -8,8 +8,8 @@ export default class Page {
   subElements = {};
   components = {};
 
-  async updateComponents (from, to) {
-    const data = await fetchJson(`${process.env.BACKEND_URL}api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`);
+  async updateComponents () {
+    const data = await fetchJson(`${process.env.BACKEND_URL}api/rest/products?_embed=subcategory.category&_start=1&_end=20`);
 
     this.components.sortableTable.addRows(data);
 
@@ -21,70 +21,33 @@ export default class Page {
   async initComponents () {
     const to = new Date();
     const from = new Date(to.getTime() - (30 * 24 * 60 * 60 * 1000));
-
-   /* const rangePicker = new RangePicker({
-      from,
-      to
-    });*/
+/*url = '',
+    sorted = {
+      id: headersConfig.find(item => item.sortable).id,
+      order: 'asc'
+    },
+    isSortLocally = false,
+    step = 20,
+    start = 1,
+    end = start + step*/
 
     const sortableTable = new SortableTable(header, {
-      url: `api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`,
-      isSortLocally: false
+      url: `api/rest/products?_embed=subcategory.category`,
+      isSortLocally: false,
     });
-
-    /*const ordersChart = new ColumnChart({
-      url: 'api/dashboard/orders',
-      range: {
-        from,
-        to
-      },
-      label: 'orders',
-      link: '#'
-    });
-
-    const salesChart = new ColumnChart({
-      url: 'api/dashboard/sales',
-      label: 'sales',
-      range: {
-        from,
-        to
-      }
-    });
-
-    const customersChart = new ColumnChart({
-      url: 'api/dashboard/customers',
-      label: 'customers',
-      range: {
-        from,
-        to
-      }
-    });*/
-
     this.components.sortableTable = sortableTable;
-    /*this.components.ordersChart = ordersChart;
-    this.components.salesChart = salesChart;
-    this.components.customersChart = customersChart;
-    this.components.rangePicker = rangePicker;*/
   }
 
   get template () {
     return `<div class="dashboard">
       <div class="content__top-panel">
-        <h2 class="page-title">Dashboard</h2>
-        <!-- RangePicker component -->
-        <!--<div data-element="rangePicker"></div>-->
+        <h2 class="page-title">Товары</h2>
+        <a href="/products/add" class="button-primary">Добавить товар</a>
       </div>
-      <div data-element="chartsRoot" class="dashboard__charts">
-        <!-- column-chart components -->
-        <div data-element="ordersChart" class="dashboard__chart_orders"></div>
-        <div data-element="salesChart" class="dashboard__chart_sales"></div>
-        <div data-element="customersChart" class="dashboard__chart_customers"></div>
-      </div>
-
-      <h3 class="block-title">Best sellers</h3>
-
-      <div data-element="sortableTable">
-        <!-- sortable-table component -->
+      <div data-element="productsContainer" class="products-list__container">
+          <div data-element="sortableTable">
+          <!-- sortable-table component -->
+        </div>
       </div>
     </div>`;
   }
