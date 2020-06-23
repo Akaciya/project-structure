@@ -27,7 +27,7 @@ export default class Page {
   async getCategoryList() {
     const categoryData = await fetchJson(`https://course-js.javascript.ru/api/rest/categories?_sort=weight&_refs=subcategory`);
     const arrCategory = [];
-
+    console.log(categoryData);//выводится 2 раза ....?
     categoryData.forEach( ({title, id, subcategories}) => {
       const arrLi = subcategories.map((item) => this.liTemplate(item.id, item.title, item.count));
       const sortList = new SortableList({items: arrLi});
