@@ -1,6 +1,7 @@
 import fetchJson from "../../utils/fetch-json.js";
 import escapeHtml from "../../utils/escape-html.js";
 import SortableList from "../../components/sortable-list/index.js";
+import NotificationMessage from "../../components/notification/index.js";
 
 const IMGUR_CLIENT_ID = '28aaa2e823b03b1';
 const BACKEND_URL = 'https://course-js.javascript.ru';
@@ -43,7 +44,7 @@ export default class ProductForm {
         uploadImage.classList.add('is-loading');
         uploadImage.disabled = true;
 
-        const result = await fetchJson('https://api.imgur.com/3/image', {
+        const result = await fetchJson(`${IMGUR_URL}`, {
           method: 'POST',
           headers: {
             Authorization: `Client-ID ${IMGUR_CLIENT_ID}`
@@ -69,7 +70,6 @@ export default class ProductForm {
 
   constructor(productId) {
     this.productId = productId;
-    console.log(11111, productId);
   }
 
   template() {
@@ -215,6 +215,8 @@ export default class ProductForm {
     });
 
     this.dispatchEvent(result.id);
+    const note = new NotificationMessage('Товар сохранен');
+    note.show();
   }
 
   getFormData() {
@@ -249,7 +251,6 @@ export default class ProductForm {
     const event = this.productId
       ? new CustomEvent('product-updated', { detail: id })
       : new CustomEvent('product-saved');
-
     this.element.dispatchEvent(event);
   }
 
@@ -319,13 +320,13 @@ export default class ProductForm {
     wrapper.innerHTML = `
       <li class="products-edit__imagelist-item sortable-list__item">
         <span>
-          <img src="icon-grab.svg" data-grab-handle alt="grab">
+          <img src="/icon-grab.svg" data-grab-handle alt="grab">
           <img class="sortable-table__cell-img" alt="${escapeHtml(name)}" src="${escapeHtml(url)}">
           <span>${escapeHtml(name)}</span>
         </span>
 
         <button type="button">
-          <img src="icon-trash.svg" alt="delete" data-delete-handle>
+          <img src="/icon-trash.svg" alt="delete" data-delete-handle>
         </button>
       </li>`;
 

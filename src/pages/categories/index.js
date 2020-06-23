@@ -8,6 +8,16 @@ export default class Page {
   components = {};
   category;
 
+  onShow =(event)=> {
+    const header = this.subElements.querySelectorAll('.category__header');
+    const target = event.target;
+    header.forEach((item) => {
+      if (target === item) {
+        target.closest('.category').classList.toggle('category_open');
+      }
+    });
+  };
+
    constructor() {
     this.render();
   }
@@ -80,13 +90,12 @@ export default class Page {
     this.getCategoryList();
     this.element = element.firstElementChild;
     this.subElements = this.getSubElements(this.element)[0];
-
-    //await this.initComponents();
-    this.initEventListeners();
-
-    return this.element;
+    this.initEventListeners ();
+      return this.element;
   }
-
+  initEventListeners () {
+    this.subElements.addEventListener('click', event => this.onShow(event));
+  }
   getSubElements ($element) {
     const elements = $element.querySelectorAll('[data-element]');
 
@@ -97,15 +106,13 @@ export default class Page {
     }, {});
   }
 
-  initEventListeners () {
-    console.log(this.element.querySelector('ul'));
-    /*this.components.rangePicker.element.addEventListener('date-select', event => {
-      const { from, to } = event.detail;
-      this.updateChartsComponents(from, to);
-      this.updateTableComponent(from, to);
-    });*/
+  renderComponents () {
+    Object.keys(this.components).forEach(component => {
+      const root = this.subElements[component];
+      const { element } = this.components[component];
+      root.append(element);
+    });
   }
-
   destroy () {
     for (const component of Object.values(this.components)) {
       component.destroy();

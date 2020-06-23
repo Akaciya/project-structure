@@ -1,5 +1,4 @@
 import ProductForm from '../../../components/product-form/index.js';
-import SortableList from "../../../components/sortable-list/index.js";
 
 export default class Page {
 
@@ -9,33 +8,12 @@ export default class Page {
   components = {};
 
   constructor(matches) {
-    console.log(matches);
     this.productId = matches[1];
-    console.log('this.productId='+this.productId);
   }
-
- /* async updateTableComponent (from, to) {
-    const data = await fetchJson(`${process.env.BACKEND_URL}api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`);
-    this.components.sortableTable.addRows(data);
-  }*/
 
   async initComponents () {
     const productForm = new ProductForm(this.productId);
-    //console.log();
-    /*productForm.addEventListener('product-saved', event => {
-      console.error('product-saved', event.detail);
-    });
-
-    productForm.addEventListener('product-updated', event => {
-      console.error('product-updated', event.detail);
-    });*/
-
-    //root.append(productForm.element);
     return productForm.render();
-    //this.components.productForm = productForm;
-    //console.log(this.components.productForm, 'f');
-    //return Object.values(productForm);
-
   }
 
   get template() {
@@ -60,21 +38,12 @@ export default class Page {
     element.innerHTML = this.template;
 
     this.element = element.firstElementChild;
-    console.log(this.element);//product-edit
-    //this.subElements = this.getSubElements(this.element);
     this.subElements = this.element.querySelector('.content-box');
     this.subElements.append(await this.initComponents());
-    //this.imageListContainer = this.subElements.querySelector('[data-element="imageListContainer"]').firstElementChild;
-    console.log(this.subElements.querySelector('[data-element="imageListContainer"]').firstElementChild);
-    /*const items = this.imageListContainer.map(({ url, source }) => this.itemImageTemplate({url, source}));
-    const sortableList = new SortableList({
-      items
-    });*/
+
     await this.initComponents();
 
     this.renderComponents();
-
-    //this.initEventListeners();
 
     return this.element;
   }
@@ -99,13 +68,6 @@ export default class Page {
     }, {});
   }*/
 
-  /*initEventListeners () {
-   /!* this.components.rangePicker.element.addEventListener('date-select', event => {
-      const { from, to } = event.detail;
-      this.updateChartsComponents(from, to);
-      this.updateTableComponent(from, to);
-    });*!/
-  }*/
 
   destroy () {
     for (const component of Object.values(this.components)) {
