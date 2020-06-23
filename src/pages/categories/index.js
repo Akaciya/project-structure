@@ -9,7 +9,8 @@ export default class Page {
   category;
 
   onShow =(event)=> {
-    const header = this.subElements.querySelectorAll('.category__header');
+    //const header = this.subElements.querySelectorAll('.category__header');
+    const header = this.subElements.querySelectorAll('[data-toggle-handle]');
     const target = event.target;
     header.forEach((item) => {
       if (target === item) {
@@ -54,7 +55,7 @@ export default class Page {
     const  wrapper = document.createElement('div');
     wrapper.innerHTML = `
       <div data-id="${id}" class="category category_open">
-        <header class="category__header">${header}</header>
+        <header class="category__header" data-toggle-handle="">${header}</header>
         <div class="category__body">
           <div class="subcategory-list">
           </div>
